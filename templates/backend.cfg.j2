@@ -1,0 +1,5 @@
+#{{ ansible_managed }}
+backend {{ item }}
+{% for v in haproxy_backends[item] %}
+   {{v.replace("\n","\n   ")}}
+{% endfor %}

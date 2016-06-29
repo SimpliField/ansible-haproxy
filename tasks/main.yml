@@ -1,0 +1,61 @@
+---
+- name: "add haproxy apt repo"
+  apt_repository:
+    repo: "ppa:vbernat/haproxy-1.6"
+    state: present
+    update_cache: yes
+
+- name: "install haproxy"
+  apt:
+    pkg: "{{ item }}"
+    state: present
+  with_items:
+  - haproxy
+  - socat
+
+- name: "enable haproxy"
+  service:
+    name: haproxy
+    enabled: yes
+
+- name: "create {{item}} path"
+  file:
+    dest: "{{ haproxy_config_path }}/{{item}}.d"
+    state: directory
+  with_items:
+  - backend
+  - frontend
+  - listen
+  - userlists
+
+- name: "setup global"
+  template:
+    src: "global.cfg.j2"
+    dest: "{{ haproxy_config_path }}/global.cfg"
+
+- name: "setup default"
+  template:
+    src: "default.cfg.j2"
+    dest: "{{ haproxy_config_path }}/default.cfg"
+
+- name: "setup frontend"
+  template:
+    src: "frontend.cfg.j2"
+    dest: "{{ haproxy_config_path }}/frontend.d/{{ item }}.cfg"
+  with_items: "{{ haproxy_frontends.keys()}}"
+
+- name: "setup backend"
+  template:
+    src: "backend.cfg.j2"
+    dest: "{{ haproxy_config_path }}/backend.d/{{ item }}.cfg"
+  with_items: "{{ haproxy_backends.keys()}}"
+
+- name: "set makefile"
+  copy:
+    src: "Makefile"
+    dest: "{{ haproxy_config_path }}/Makefile"
+
+- name: "build configuration"
+  make:
+    chdir: "{{ haproxy_config_path }}"
+  notify: restart haproxy

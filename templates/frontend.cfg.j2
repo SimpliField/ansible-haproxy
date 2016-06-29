@@ -1,0 +1,5 @@
+#{{ ansible_managed }}
+frontend {{ item }}
+{% for v in haproxy_frontends[item] %}
+   {{v.replace("\n","\n   ")}}
+{% endfor %}
