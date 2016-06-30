@@ -18,7 +18,7 @@
     name: haproxy
     enabled: yes
 
-- name: "create {{item}} path"
+- name: "create config paths"
   file:
     dest: "{{ haproxy_config_path }}/{{item}}.d"
     state: directory
