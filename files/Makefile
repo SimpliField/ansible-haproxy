@@ -1,4 +1,4 @@
-proxy.cfg: global.cfg default.cfg frontend.d/*.cfg backend.d/*.cfg
+haproxy.cfg: global.cfg default.cfg frontend.d/*.cfg backend.d/*.cfg
 	cat $^ > $@
 
 clean:
