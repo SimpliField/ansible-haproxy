@@ -6,7 +6,8 @@ Setup HAProxy
 Requirements
 ------------
 
-Need ansible 2
+- Ansible 2.x
+- `Make` package on remote system
 
 Role Variables
 --------------
@@ -29,13 +30,31 @@ haproxy_backends:
 Dependencies
 ------------
 
-There is no dependencies
+You must installe `make` (`apt-get install make -y`) on remote host. 
+
+This is done by our example playbook.
 
 Example Playbook
 ----------------
 
 ```yaml
-- hosts: servers
+- hosts: haproxy
+  tasks:
+  - name: install make
+    apt: name=make state=present
+
+- hosts: haproxy
+  vars:
+    haproxy_frontends:
+      http_front:
+      - bind *:80
+      - default_backend http_back
+    haproxy_backends:
+      http_back:
+      - balance roundrobin
+      - server http1 10.0.0.1:80 check
+      - server http2 10.0.0.2:80 check
+
   roles:
   - role: SimpliField.haproxy
 ```
