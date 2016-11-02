@@ -1,13 +1,12 @@
 HAProxy
 =========
 
-Setup HAProxy
+> Setup HAProxy with splited config files
 
 Requirements
 ------------
 
 - Ansible 2.x
-- `Make` package on remote system
 
 Role Variables
 --------------
@@ -30,19 +29,12 @@ haproxy_backends:
 Dependencies
 ------------
 
-You must installe `make` (`apt-get install make -y`) on remote host. 
-
-This is done by our example playbook.
+All dependencies are bundled in `meta/main.yml`
 
 Example Playbook
 ----------------
 
 ```yaml
-- hosts: haproxy
-  tasks:
-  - name: install make
-    apt: name=make state=present
-
 - hosts: haproxy
   vars:
     haproxy_frontends:
