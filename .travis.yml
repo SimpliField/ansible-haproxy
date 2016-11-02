@@ -1,9 +1,7 @@
 ---
 language: python
 python: "2.7"
-
-# Use the new container infrastructure
-sudo: false
+sudo: true
 
 # Install ansible
 addons:
@@ -20,6 +18,9 @@ install:
 
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../' >ansible.cfg
+
+  # Install dependencies
+  - ansible-galaxy install SimpliField.packages
 
 script:
   # Basic role syntax check
