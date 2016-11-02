@@ -20,7 +20,7 @@
 
 - name: "create config paths"
   file:
-    dest: "{{ haproxy_config_path }}/{{item}}.d"
+    dest: "{{ haproxy_config_path }}/{{ item }}.d"
     state: directory
   with_items:
   - backend
